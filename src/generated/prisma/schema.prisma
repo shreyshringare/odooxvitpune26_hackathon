@@ -1,0 +1,141 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  ADMIN
+  MANAGER
+  EMPLOYEE
+}
+
+enum RuleType {
+  SEQUENTIAL
+  PERCENTAGE
+  SPECIFIC
+  HYBRID
+}
+
+enum ExpenseStatus {
+  DRAFT
+  SUBMITTED
+  WAITING_APPROVAL
+  APPROVED
+  REJECTED
+}
+
+enum StepStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+}
+
+model Company {
+  id            String   @id @default(uuid())
+  name          String
+  country       String
+  base_currency String
+  created_at    DateTime @default(now())
+
+  users    User[]
+  rules    ApprovalRule[]
+  expenses Expense[]
+}
+
+model User {
+  id            String   @id @default(uuid())
+  company_id    String
+  manager_id    String?
+  name          String
+  email         String   @unique
+  password_hash String?
+  role          Role     @default(EMPLOYEE)
+  created_at    DateTime @default(now())
+  active        Boolean  @default(true)
+
+  company        Company                @relation(fields: [company_id], references: [id])
+  manager        User?                  @relation("ManagerToUser", fields: [manager_id], references: [id])
+  subordinates   User[]                 @relation("ManagerToUser")
+  expenses       Expense[]              @relation("ExpenseSubmitter")
+  rule_approvers ApprovalRuleApprover[]
+  approval_steps ApprovalStep[]
+  specific_rules ApprovalRule[]         @relation("SpecificRuleApprover")
+}
+
+model ApprovalRule {
+  id                   String   @id @default(uuid())
+  company_id           String
+  description          String
+  is_manager_approver  Boolean
+  is_sequential        Boolean
+  approval_percentage  Int?
+  specific_approver_id String?
+  rule_type            RuleType
+  active               Boolean  @default(true)
+  created_at           DateTime @default(now())
+
+  company           Company                @relation(fields: [company_id], references: [id])
+  specific_approver User?                  @relation("SpecificRuleApprover", fields: [specific_approver_id], references: [id])
+  approvers         ApprovalRuleApprover[]
+  expenses          Expense[]
+}
+
+model ApprovalRuleApprover {
+  id               String       @id @default(uuid())
+  approval_rule_id String
+  user_id          String
+  step_order       Int
+  is_required      Boolean
+  approval_rule    ApprovalRule @relation(fields: [approval_rule_id], references: [id])
+  user             User         @relation(fields: [user_id], references: [id])
+}
+
+model Expense {
+  id                          String        @id @default(uuid())
+  submitted_by                String
+  company_id                  String
+  approval_rule_id            String
+  original_amount             Decimal
+  original_currency           String
+  base_amount                 Decimal
+  exchange_rate_at_submission Decimal
+  category                    String
+  description                 String
+  expense_date                DateTime      @db.Date
+  paid_by                     String
+  receipt_url                 String?
+  remarks                     String?
+  status                      ExpenseStatus @default(DRAFT)
+  current_approval_step       Int
+  created_at                  DateTime      @default(now())
+
+  submitter      User           @relation("ExpenseSubmitter", fields: [submitted_by], references: [id])
+  company        Company        @relation(fields: [company_id], references: [id])
+  approval_rule  ApprovalRule   @relation(fields: [approval_rule_id], references: [id])
+  approval_steps ApprovalStep[]
+}
+
+model ApprovalStep {
+  id          String     @id @default(uuid())
+  expense_id  String
+  approver_id String
+  step_order  Int
+  status      StepStatus @default(PENDING)
+  comments    String?
+  decided_at  DateTime?
+
+  expense  Expense @relation(fields: [expense_id], references: [id])
+  approver User    @relation(fields: [approver_id], references: [id])
+}
+
+model ExchangeRateCache {
+  id            String   @id @default(uuid())
+  base_currency String   @unique
+  rates         Json
+  fetched_at    DateTime @default(now())
+}

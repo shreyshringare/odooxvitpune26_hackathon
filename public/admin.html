@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>User Management | XpenseFlow</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            "primary":    "#714B67",
+            "secondary":  "#00A09D",
+            "background": "#FAFAFA",
+            "surface":    "#FFFFFF",
+            "sidebar-bg": "#F9F7F8"
+          },
+          fontFamily: {
+            "sans": ["Noto Sans","sans-serif"],
+            "mono": ["JetBrains Mono","monospace"]
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .material-symbols-outlined { font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24; display:inline-block; line-height:1; }
+    body { font-family:'Noto Sans',sans-serif; }
+    #toast { transition: opacity 0.3s, transform 0.3s; }
+  </style>
+</head>
+<body class="bg-background text-slate-900 antialiased">
+
+  <!-- Role Gate — shown if not admin -->
+  <div id="roleGate" class="hidden fixed inset-0 z-[100] bg-background flex flex-col items-center justify-center">
+    <div class="text-center max-w-sm">
+      <div class="w-20 h-20 rounded-2xl bg-red-50 flex items-center justify-center mx-auto mb-6">
+        <span class="material-symbols-outlined text-4xl text-red-400">lock</span>
+      </div>
+      <h1 class="text-2xl font-black text-slate-800 mb-3">Access Restricted</h1>
+      <p class="text-slate-500 text-sm mb-8">This page is only available to <span class="font-bold text-primary">Administrators</span>. Contact your system admin for access.</p>
+      <a href="dashboard.html" class="inline-block bg-primary text-white font-bold px-7 py-3 rounded-xl shadow-lg hover:opacity-90 transition-all">Go to My Expenses</a>
+    </div>
+  </div>
+
+  <!-- Top Nav -->
+  <header class="fixed top-0 w-full z-50 bg-white border-b border-gray-100 flex items-center justify-between px-8 h-20">
+    <div class="flex items-center gap-12">
+      <a href="dashboard.html" class="flex flex-col">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded bg-primary flex items-center justify-center text-white font-black text-sm">XF</div>
+          <span class="text-2xl font-black text-primary tracking-tight">XpenseFlow</span>
+        </div>
+        <span class="text-[10px] font-bold text-slate-400 tracking-[0.2em] mt-1 uppercase">Enterprise Edition</span>
+      </a>
+      <div class="hidden md:flex items-center gap-3 bg-slate-100/80 px-4 py-2.5 rounded-lg">
+        <span class="material-symbols-outlined text-slate-400 text-lg">search</span>
+        <input id="searchInput" class="bg-transparent border-none focus:ring-0 text-sm w-80 outline-none placeholder-slate-400" placeholder="Search users..." type="text"/>
+      </div>
+    </div>
+    <div class="flex items-center gap-6">
+      <button class="relative text-slate-500 hover:text-primary transition-colors">
+        <span class="material-symbols-outlined text-2xl">notifications</span>
+      </button>
+      <div class="flex items-center gap-3 pl-4 border-l border-slate-100">
+        <div class="text-right hidden sm:block">
+          <p class="text-sm font-bold text-slate-800 leading-tight">Alex Rivera</p>
+          <p class="text-[10px] font-medium text-primary font-bold">Administrator</p>
+        </div>
+        <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-black text-sm">AR</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sidebar -->
+  <aside class="h-screen w-72 fixed left-0 top-0 pt-20 bg-sidebar-bg flex flex-col z-40 border-r border-slate-200/50">
+    <nav class="flex-1 px-4 py-6 space-y-1">
+      <a href="dashboard.html" class="flex items-center text-slate-500 hover:bg-white hover:text-primary px-4 py-3.5 rounded-xl font-bold transition-all">
+        <span class="material-symbols-outlined mr-4 text-[22px]">receipt_long</span>
+        <span class="text-[14px]">My Expenses</span>
+      </a>
+      <a href="approvals.html" class="flex items-center text-slate-500 hover:bg-white hover:text-primary px-4 py-3.5 rounded-xl font-bold transition-all">
+        <span class="material-symbols-outlined mr-4 text-[22px]">fact_check</span>
+        <span class="text-[14px]">Approvals</span>
+      </a>
+      <a href="#" class="flex items-center text-slate-500 hover:bg-white hover:text-primary px-4 py-3.5 rounded-xl font-bold transition-all">
+        <span class="material-symbols-outlined mr-4 text-[22px]">insights</span>
+        <span class="text-[14px]">Insights</span>
+      </a>
+      <a href="admin.html" class="flex items-center bg-white text-primary shadow-sm px-4 py-3.5 rounded-xl font-bold">
+        <span class="material-symbols-outlined mr-4 text-[22px]">group</span>
+        <span class="text-[14px]">User Management</span>
+      </a>
+    </nav>
+    <div class="px-4 pb-8 space-y-1 border-t border-slate-200/50 pt-4">
+      <a href="#" class="flex items-center text-slate-400 hover:text-primary px-4 py-2 transition-colors">
+        <span class="material-symbols-outlined mr-3 text-[20px]">help</span>
+        <span class="font-bold text-xs uppercase tracking-wider">Help Center</span>
+      </a>
+      <a href="../index.html" class="flex items-center text-slate-400 hover:text-primary px-4 py-2 transition-colors">
+        <span class="material-symbols-outlined mr-3 text-[20px]">logout</span>
+        <span class="font-bold text-xs uppercase tracking-wider">Logout</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="ml-72 pt-20 min-h-screen bg-background">
+    <div class="max-w-[1400px] mx-auto p-10 space-y-8">
+
+      <!-- Page Header -->
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+          <h2 class="text-4xl font-black text-primary mb-2">User Management</h2>
+          <p class="text-slate-500 font-medium">Manage team members, roles, and access levels.</p>
+        </div>
+        <div class="flex gap-3">
+          <button onclick="exportCSV()" class="px-6 py-3.5 border-2 border-slate-200 text-primary font-bold rounded-xl hover:bg-slate-50 transition-colors flex items-center gap-2">
+            <span class="material-symbols-outlined text-lg">download</span>Export CSV
+          </button>
+          <button onclick="openAddModal()" class="bg-primary text-white px-8 py-3.5 rounded-xl font-bold flex items-center gap-2 shadow-xl shadow-primary/25 hover:translate-y-[-2px] active:scale-95 transition-all">
+            <span class="material-symbols-outlined">person_add</span>Add Employee
+          </button>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <section id="userStats" class="grid grid-cols-1 md:grid-cols-3 gap-5"></section>
+
+      <!-- Users Table -->
+      <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead class="bg-slate-50/50 border-b border-slate-100">
+              <tr>
+                <th class="px-8 py-5 text-[10px] uppercase tracking-[0.2em] text-slate-400 font-black">Name &amp; Email</th>
+                <th class="px-8 py-5 text-[10px] uppercase tracking-[0.2em] text-slate-400 font-black">Role</th>
+                <th class="px-8 py-5 text-[10px] uppercase tracking-[0.2em] text-slate-400 font-black text-center">Status</th>
+                <th class="px-8 py-5 text-right text-[10px] uppercase tracking-[0.2em] text-slate-400 font-black">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="usersTableBody" class="divide-y divide-slate-50"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Add Employee Modal -->
+  <div id="addModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4">
+    <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden flex flex-col">
+      <header class="px-8 py-6 flex justify-between items-center border-b border-slate-100">
+        <h2 class="text-xl font-black text-primary">Add Employee</h2>
+        <button onclick="closeAddModal()" class="p-2 hover:bg-slate-100 rounded-full transition-colors">
+          <span class="material-symbols-outlined text-slate-500">close</span>
+        </button>
+      </header>
+      <div class="p-8 space-y-5">
+        <div>
+          <label class="block text-xs font-black text-slate-500 uppercase tracking-wider mb-2">Full Name</label>
+          <input id="a_name" type="text" placeholder="e.g. Priya Nair" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"/>
+        </div>
+        <div>
+          <label class="block text-xs font-black text-slate-500 uppercase tracking-wider mb-2">Work Email</label>
+          <input id="a_email" type="email" placeholder="user@company.com" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"/>
+        </div>
+        <div>
+          <label class="block text-xs font-black text-slate-500 uppercase tracking-wider mb-2">Role</label>
+          <select id="a_role" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20">
+            <option value="Standard Employee">Standard Employee</option>
+            <option value="Department Manager">Department Manager</option>
+            <option value="Administrator">Administrator</option>
+          </select>
+        </div>
+      </div>
+      <footer class="px-8 py-5 border-t border-slate-100 bg-slate-50/50 flex justify-end gap-3">
+        <button onclick="closeAddModal()" class="px-5 py-2.5 text-slate-500 font-bold hover:bg-slate-100 rounded-lg text-sm">Cancel</button>
+        <button onclick="submitAddEmployee()" class="px-7 py-2.5 bg-primary text-white font-bold rounded-xl text-sm shadow-lg hover:opacity-90 active:scale-95 transition-all">Create Account</button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="hidden fixed bottom-8 right-8 z-[200] bg-white rounded-2xl shadow-2xl border border-slate-100 p-5 max-w-sm">
+    <div class="flex items-start gap-4">
+      <div class="w-10 h-10 rounded-xl bg-secondary/10 flex items-center justify-center flex-shrink-0">
+        <span class="material-symbols-outlined text-secondary" style="font-variation-settings:'FILL' 1">check_circle</span>
+      </div>
+      <div class="flex-1">
+        <p class="font-black text-slate-800 text-sm mb-1" id="toastTitle">Employee Added</p>
+        <p class="text-xs text-slate-500 mb-3" id="toastMsg">Account created successfully.</p>
+        <div id="toastPwdSection" class="hidden bg-slate-50 rounded-lg px-4 py-3 flex items-center justify-between gap-4">
+          <span id="toastPwd" class="font-mono text-sm font-bold text-primary tracking-widest"></span>
+          <button onclick="copyPassword()" class="text-xs font-black text-secondary hover:underline uppercase tracking-wider">Copy</button>
+        </div>
+      </div>
+      <button onclick="hideToast()" class="text-slate-400 hover:text-slate-600 flex-shrink-0">
+        <span class="material-symbols-outlined text-lg">close</span>
+      </button>
+    </div>
+  </div>
+
+  <script src="js/admin.js"></script>
+</body>
+</html>

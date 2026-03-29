@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Approval Queue | XpenseFlow</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            "primary":    "#714B67",
+            "secondary":  "#00A09D",
+            "background": "#FAFAFA",
+            "surface":    "#FFFFFF",
+            "sidebar-bg": "#F9F7F8"
+          },
+          fontFamily: {
+            "sans": ["Noto Sans","sans-serif"],
+            "mono": ["JetBrains Mono","monospace"]
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .material-symbols-outlined { font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24; display:inline-block; line-height:1; }
+    body { font-family:'Noto Sans',sans-serif; }
+  </style>
+</head>
+<body class="bg-background text-slate-900 antialiased">
+
+  <!-- Top Nav -->
+  <header class="fixed top-0 w-full z-50 bg-white border-b border-gray-100 flex items-center justify-between px-8 h-20">
+    <div class="flex items-center gap-12">
+      <a href="dashboard.html" class="flex flex-col">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded bg-primary flex items-center justify-center text-white font-black text-sm">XF</div>
+          <span class="text-2xl font-black text-primary tracking-tight">XpenseFlow</span>
+        </div>
+        <span class="text-[10px] font-bold text-slate-400 tracking-[0.2em] mt-1 uppercase">Enterprise Edition</span>
+      </a>
+      <div class="hidden md:flex items-center gap-3 bg-slate-100/80 px-4 py-2.5 rounded-lg">
+        <span class="material-symbols-outlined text-slate-400 text-lg">search</span>
+        <input id="searchInput" class="bg-transparent border-none focus:ring-0 text-sm w-80 outline-none placeholder-slate-400" placeholder="Search queue..." type="text"/>
+      </div>
+    </div>
+    <div class="flex items-center gap-6">
+      <button class="relative text-slate-500 hover:text-primary transition-colors">
+        <span class="material-symbols-outlined text-2xl">notifications</span>
+        <span class="absolute top-0 right-0 w-2 h-2 bg-primary rounded-full border-2 border-white"></span>
+      </button>
+      <div class="flex items-center gap-3 pl-4 border-l border-slate-100">
+        <div class="text-right hidden sm:block">
+          <p class="text-sm font-bold text-slate-800 leading-tight">Alex Rivera</p>
+          <p class="text-[10px] font-medium text-slate-400">Manager Access</p>
+        </div>
+        <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-black text-sm">AR</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sidebar -->
+  <aside class="h-screen w-72 fixed left-0 top-0 pt-20 bg-sidebar-bg flex flex-col z-40 border-r border-slate-200/50">
+    <nav class="flex-1 px-4 py-6 space-y-1">
+      <a href="dashboard.html" class="flex items-center text-slate-500 hover:bg-white hover:text-primary px-4 py-3.5 rounded-xl font-bold transition-all">
+        <span class="material-symbols-outlined mr-4 text-[22px]">receipt_long</span>
+        <span class="text-[14px]">My Expenses</span>
+      </a>
+      <a href="approvals.html" class="flex items-center bg-white text-primary shadow-sm px-4 py-3.5 rounded-xl font-bold">
+        <span class="material-symbols-outlined mr-4 text-[22px]">fact_check</span>
+        <span class="text-[14px]">Approvals</span>
+      </a>
+      <a href="#" class="flex items-center text-slate-500 hover:bg-white hover:text-primary px-4 py-3.5 rounded-xl font-bold transition-all">
+        <span class="material-symbols-outlined mr-4 text-[22px]">insights</span>
+        <span class="text-[14px]">Insights</span>
+      </a>
+      <a href="admin.html" class="flex items-center text-slate-500 hover:bg-white hover:text-primary px-4 py-3.5 rounded-xl font-bold transition-all">
+        <span class="material-symbols-outlined mr-4 text-[22px]">group</span>
+        <span class="text-[14px]">User Management</span>
+      </a>
+    </nav>
+    <div class="px-4 pb-8 space-y-1 border-t border-slate-200/50 pt-4">
+      <a href="#" class="flex items-center text-slate-400 hover:text-primary px-4 py-2 transition-colors">
+        <span class="material-symbols-outlined mr-3 text-[20px]">help</span>
+        <span class="font-bold text-xs uppercase tracking-wider">Help Center</span>
+      </a>
+      <a href="../index.html" class="flex items-center text-slate-400 hover:text-primary px-4 py-2 transition-colors">
+        <span class="material-symbols-outlined mr-3 text-[20px]">logout</span>
+        <span class="font-bold text-xs uppercase tracking-wider">Logout</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="ml-72 pt-20 min-h-screen bg-background">
+    <div class="max-w-[1400px] mx-auto p-10 space-y-8">
+
+      <!-- Page Header -->
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+          <h2 class="text-4xl font-black text-primary mb-2">Approval Queue</h2>
+          <p class="text-slate-500 font-medium">Review and validate pending expense reports.</p>
+        </div>
+        <div class="flex gap-3">
+          <button id="bulkApproveBtn" onclick="bulkApprove()" class="hidden px-6 py-3 bg-secondary text-white font-bold rounded-xl flex items-center gap-2 shadow-lg hover:opacity-90 transition-all">
+            <span class="material-symbols-outlined text-lg">done_all</span>
+            Approve Selected
+          </button>
+        </div>
+      </div>
+
+      <!-- Summary Cards -->
+      <section id="summaryCards" class="grid grid-cols-1 md:grid-cols-3 gap-5"></section>
+
+      <!-- Approvals Table -->
+      <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse min-w-[900px]">
+            <thead class="bg-slate-50/50 border-b border-slate-100">
+              <tr>
+                <th class="px-6 py-5 w-12 text-center">
+                  <input type="checkbox" id="selectAll" onchange="toggleSelectAll(this)" class="rounded border-gray-300 text-primary focus:ring-primary h-4 w-4"/>
+                </th>
+                <th class="px-6 py-5 text-[10px] uppercase tracking-[0.2em] text-slate-400 font-black">Employee</th>
+                <th class="px-6 py-5 text-[10px] uppercase tracking-[0.2em] text-slate-400 font-black">Description</th>
+                <th class="px-6 py-5 text-[10px] uppercase tracking-[0.2em] text-slate-400 font-black">Category</th>
+                <th class="px-6 py-5 text-[10px] uppercase tracking-[0.2em] text-slate-400 font-black text-right">Amount</th>
+                <th class="px-6 py-5 text-[10px] uppercase tracking-[0.2em] text-slate-400 font-black">Date</th>
+                <th class="px-6 py-5 text-[10px] uppercase tracking-[0.2em] text-slate-400 font-black text-center">Status</th>
+                <th class="px-6 py-5 text-right text-[10px] uppercase tracking-[0.2em] text-slate-400 font-black">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="approvalsTableBody" class="divide-y divide-slate-50"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Reject Comment Modal -->
+  <div id="rejectModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4">
+    <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden">
+      <header class="px-7 py-5 flex justify-between items-center border-b border-slate-100">
+        <h2 class="text-lg font-black text-red-600">Reject Expense</h2>
+        <button onclick="closeRejectModal()" class="p-2 hover:bg-slate-100 rounded-full transition-colors">
+          <span class="material-symbols-outlined text-slate-500">close</span>
+        </button>
+      </header>
+      <div class="p-7 space-y-4">
+        <p class="text-sm text-slate-500">Provide a reason so the employee can resubmit correctly.</p>
+        <textarea id="rejectReason" rows="4" placeholder="Reason for rejection..." class="w-full bg-slate-50 border border-red-200 rounded-xl p-4 text-sm focus:outline-none focus:ring-2 focus:ring-red-300 resize-none"></textarea>
+      </div>
+      <footer class="px-7 py-5 border-t border-slate-100 bg-slate-50/50 flex justify-end gap-3">
+        <button onclick="closeRejectModal()" class="px-5 py-2.5 text-slate-500 font-bold hover:bg-slate-100 rounded-lg text-sm transition-colors">Cancel</button>
+        <button onclick="confirmReject()" class="px-7 py-2.5 bg-red-600 text-white font-bold rounded-xl text-sm hover:bg-red-700 transition-colors">Confirm Rejection</button>
+      </footer>
+    </div>
+  </div>
+
+  <script src="js/approvals.js"></script>
+</body>
+</html>

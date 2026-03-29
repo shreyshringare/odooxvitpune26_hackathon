@@ -1,0 +1,111 @@
+{
+  "expenses": [
+    {
+      "id": "EXP-1001-Q4",
+      "employeeName": "Jordan Smith",
+      "employeeInitials": "JS",
+      "employeeRole": "Software Engineer",
+      "description": "Cloud Infrastructure Setup — AWS EC2 Reserved Instances",
+      "category": "Software",
+      "amount": 14200.00,
+      "currency": "INR",
+      "localAmount": null,
+      "date": "2023-10-12",
+      "status": "Waiting Approval",
+      "receiptName": "receipt_aws_oct12.pdf",
+      "approvalType": "sequential",
+      "steps": [
+        { "title": "Line Manager",       "status": "approved", "actor": "Sarah Chen",    "timestamp": "2023-10-12T09:30:00Z" },
+        { "title": "Finance Review",     "status": "pending",  "actor": "Rajesh Kumar",  "timestamp": null },
+        { "title": "Executive Sign-off", "status": "queued",   "actor": "CEO Office",    "timestamp": null }
+      ],
+      "remarks": "Needed for Q4 infrastructure capacity upgrade."
+    },
+    {
+      "id": "EXP-1002-Q4",
+      "employeeName": "Elena Vance",
+      "employeeInitials": "EV",
+      "employeeRole": "Product Manager",
+      "description": "Flight: BOM → SFO — Q4 Product Strategy Summit",
+      "category": "Travel",
+      "amount": 42800.00,
+      "currency": "INR",
+      "localAmount": null,
+      "date": "2023-10-10",
+      "status": "Approved",
+      "receiptName": "receipt_flight_ev.pdf",
+      "approvalType": "sequential",
+      "steps": [
+        { "title": "Line Manager",       "status": "approved", "actor": "David Lee",     "timestamp": "2023-10-10T11:00:00Z" },
+        { "title": "Finance Review",     "status": "approved", "actor": "Rajesh Kumar",  "timestamp": "2023-10-11T14:20:00Z" },
+        { "title": "Executive Sign-off", "status": "approved", "actor": "CEO Office",    "timestamp": "2023-10-12T10:05:00Z" }
+      ],
+      "remarks": "Pre-approved via travel policy code TP-2023-Q4."
+    },
+    {
+      "id": "EXP-1003-Q4",
+      "employeeName": "Alex Rivera",
+      "employeeInitials": "AR",
+      "employeeRole": "Admin",
+      "description": "Executive Client Dinner — Taj Lands End",
+      "category": "Meals",
+      "amount": 8750.00,
+      "currency": "INR",
+      "localAmount": null,
+      "date": "2023-10-14",
+      "status": "Submitted",
+      "receiptName": "receipt_dinner_ar.pdf",
+      "approvalType": "specific",
+      "steps": [
+        { "name": "Rajesh (CFO)", "role": "Mandatory", "status": "Pending",
+          "text": "Meals above ₹5,000 require CFO sign-off per policy ME-14.", "sla": "24H" }
+      ],
+      "remarks": "Client engagement — project BD-2023-11."
+    },
+    {
+      "id": "EXP-1004-Q4",
+      "employeeName": "Priya Nair",
+      "employeeInitials": "PN",
+      "employeeRole": "Designer",
+      "description": "Figma Professional License — Annual",
+      "category": "Software",
+      "amount": 960.00,
+      "currency": "USD",
+      "localAmount": "80,160.00 INR",
+      "date": "2023-10-08",
+      "status": "Draft",
+      "receiptName": null,
+      "approvalType": "sequential",
+      "steps": [],
+      "remarks": ""
+    },
+    {
+      "id": "EXP-1005-Q4",
+      "employeeName": "Marcus Tan",
+      "employeeInitials": "MT",
+      "employeeRole": "Sales Lead",
+      "description": "Hotel: Marriott Singapore — 3 nights — Client Visit",
+      "category": "Travel",
+      "amount": 1800.00,
+      "currency": "SGD",
+      "localAmount": "1,11,780.00 INR",
+      "date": "2023-10-05",
+      "status": "Rejected",
+      "receiptName": "receipt_hotel_mt.pdf",
+      "approvalType": "percentage",
+      "steps": [
+        { "title": "Stakeholder Alignment", "current": 55, "target": 75 }
+      ],
+      "remarks": "Hotel rate exceeds per-diem policy limit. Please resubmit with approved vendor."
+    }
+  ],
+  "users": [
+    { "id": "USR-001", "name": "Alex Rivera",  "email": "alex@xpenseflow.io",   "role": "Administrator",       "initials": "AR", "status": "Active" },
+    { "id": "USR-002", "name": "Sarah Chen",   "email": "sarah@xpenseflow.io",  "role": "Department Manager",  "initials": "SC", "status": "Active" },
+    { "id": "USR-003", "name": "Jordan Smith", "email": "jordan@xpenseflow.io", "role": "Standard Employee",   "initials": "JS", "status": "Active" },
+    { "id": "USR-004", "name": "Elena Vance",  "email": "elena@xpenseflow.io",  "role": "Standard Employee",   "initials": "EV", "status": "Active" },
+    { "id": "USR-005", "name": "Priya Nair",   "email": "priya@xpenseflow.io",  "role": "Standard Employee",   "initials": "PN", "status": "Active" },
+    { "id": "USR-006", "name": "Marcus Tan",   "email": "marcus@xpenseflow.io", "role": "Department Manager",  "initials": "MT", "status": "Active" },
+    { "id": "USR-007", "name": "Rajesh Kumar", "email": "rajesh@xpenseflow.io", "role": "Administrator",       "initials": "RK", "status": "Active" }
+  ]
+}

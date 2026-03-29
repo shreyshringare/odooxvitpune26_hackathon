@@ -1,0 +1,62 @@
+[
+  {
+    "id": "u1-admin-0001",
+    "company_id": "comp-101",
+    "name": "Alex Rivera",
+    "email": "alex.rivera@example.com",
+    "role": "ADMIN",
+    "manager_id": null,
+    "active": true,
+    "created_at": "2024-03-29T10:00:00Z"
+  },
+  {
+    "id": "u2-manager-0001",
+    "company_id": "comp-101",
+    "name": "Sarah Chen",
+    "email": "sarah.chen@example.com",
+    "role": "MANAGER",
+    "manager_id": "u1-admin-0001",
+    "active": true,
+    "created_at": "2024-03-29T10:05:00Z"
+  },
+  {
+    "id": "u3-manager-0002",
+    "company_id": "comp-101",
+    "name": "Michael Brown",
+    "email": "michael.brown@example.com",
+    "role": "MANAGER",
+    "manager_id": "u1-admin-0001",
+    "active": true,
+    "created_at": "2024-03-29T10:10:00Z"
+  },
+  {
+    "id": "u4-employee-0001",
+    "company_id": "comp-101",
+    "name": "Jamie Smith",
+    "email": "jamie.smith@example.com",
+    "role": "EMPLOYEE",
+    "manager_id": "u2-manager-0001",
+    "active": true,
+    "created_at": "2024-03-29T10:15:00Z"
+  },
+  {
+    "id": "u5-employee-0002",
+    "company_id": "comp-101",
+    "name": "Taylor Johnson",
+    "email": "taylor.johnson@example.com",
+    "role": "EMPLOYEE",
+    "manager_id": "u2-manager-0001",
+    "active": true,
+    "created_at": "2024-03-29T10:20:00Z"
+  },
+  {
+    "id": "u6-employee-0003",
+    "company_id": "comp-101",
+    "name": "Jordan Lee",
+    "email": "jordan.lee@example.com",
+    "role": "EMPLOYEE",
+    "manager_id": "u3-manager-0002",
+    "active": true,
+    "created_at": "2024-03-29T10:25:00Z"
+  }
+]
